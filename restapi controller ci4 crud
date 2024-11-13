@@ -1,0 +1,97 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Models\nama model;
+use CodeIgniter\HTTP\ResponseInterface;
+use CodeIgniter\RESTful\ResourceController;
+
+class namacontroler extends ResourceController
+{
+    protected $modelName = 'App\Models\nama model';
+    protected $format = 'json';
+
+    public function __construct()
+    {
+        $this->model = new UserModel();
+    }
+
+    /**
+     * Menampilkan semua data user.
+     *
+     * @return ResponseInterface
+     */
+    public function index()
+    {
+        $users = $this->model->findAll();
+        return $this->respond($users);
+    }
+
+    /**
+     * Menampilkan data user berdasarkan ID.
+     *
+     * @param int|string|null $id
+     * @return ResponseInterface
+     */
+    public function show($id = null)
+    {
+        $user = $this->model->find($id);
+        if (!$user) {
+            return $this->failNotFound('User tidak ditemukan');
+        }
+        return $this->respond($user);
+    }
+
+    /**
+     * Menambah user baru.
+     *
+     * @return ResponseInterface
+     */
+    public function create()
+    {
+    $data = $this->request->getJSON(true); 
+
+    if (!$data) {
+        return $this->failValidationErrors('Tidak ada data yang dikirimkan');
+    }
+
+    
+    if (!$this->model->insert($data)) {
+        return $this->failValidationErrors($this->model->errors());
+    }
+
+    
+    return $this->respondCreated(['status' => 'sukses', 'pesan' => 'User berhasil ditambahkan']);
+    }
+
+
+    /**
+     * Mengubah data user berdasarkan ID.
+     *
+     * @param int|string|null $id
+     * @return ResponseInterface
+     */
+    public function update($id = null)
+    {
+        $data = $this->request->getRawInput();
+        if (!$this->model->update($id, $data)) {
+            return $this->failValidationErrors($this->model->errors());
+        }
+        return $this->respond(['status' => 'sukses', 'pesan' => 'User berhasil diperbarui']);
+    }
+
+    /**
+     * Menghapus data user berdasarkan ID.
+     *
+     * @param int|string|null $id
+     * @return ResponseInterface
+     */
+    public function delete($id = null)
+    {
+        if (!$this->model->find($id)) {
+            return $this->failNotFound('User tidak ditemukan');
+        }
+        $this->model->delete($id);
+        return $this->respondDeleted(['status' => 'sukses', 'pesan' => 'User berhasil dihapus']);
+    }
+}
