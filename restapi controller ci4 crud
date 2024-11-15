@@ -6,14 +6,14 @@ use App\Models\nama model;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
-class namacontroler extends ResourceController
+class nama controller extends ResourceController
 {
     protected $modelName = 'App\Models\nama model';
     protected $format = 'json';
 
     public function __construct()
     {
-        $this->model = new UserModel();
+        $this->model = new ProductModel();
     }
 
     /**
@@ -73,12 +73,13 @@ class namacontroler extends ResourceController
      */
     public function update($id = null)
     {
-        $data = $this->request->getRawInput();
+        $data = $this->request->getJSON(true); // Menggunakan getJSON untuk parsing JSON
         if (!$this->model->update($id, $data)) {
             return $this->failValidationErrors($this->model->errors());
         }
         return $this->respond(['status' => 'sukses', 'pesan' => 'User berhasil diperbarui']);
     }
+    
 
     /**
      * Menghapus data user berdasarkan ID.
