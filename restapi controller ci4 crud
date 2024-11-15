@@ -2,18 +2,18 @@
 
 namespace App\Controllers;
 
-use App\Models\nama model;
+use App\Models\namamodel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
-class nama controller extends ResourceController
+class namacontroler extends ResourceController
 {
-    protected $modelName = 'App\Models\nama model';
+    protected $modelName = 'App\Models\namamodel';
     protected $format = 'json';
 
     public function __construct()
     {
-        $this->model = new ProductModel();
+        $this->model = new testing();
     }
 
     /**
@@ -39,7 +39,7 @@ class nama controller extends ResourceController
         if (!$data) {
             return $this->failNotFound('Data tidak ditemukan');
         }
-        return $this->respond($user);
+        return $this->respond($data);
     }
 
     /**
