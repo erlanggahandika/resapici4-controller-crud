@@ -73,7 +73,7 @@ class nama controller extends ResourceController
      */
     public function update($id = null)
     {
-        $data = $this->request->getJSON(true); // Menggunakan getJSON untuk parsing JSON
+        $data = $this->request->getJSON(true); 
         if (!$this->model->update($id, $data)) {
             return $this->failValidationErrors($this->model->errors());
         }
