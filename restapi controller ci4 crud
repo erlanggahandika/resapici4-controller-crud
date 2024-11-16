@@ -2,33 +2,33 @@
 
 namespace App\Controllers;
 
-use App\Models\namamodel;
+
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
-class namacontroler extends ResourceController
+class User extends ResourceController
 {
-    protected $modelName = 'App\Models\namamodel';
+    protected $modelName = 'App\Models\UserModel';
     protected $format = 'json';
 
     public function __construct()
     {
-        $this->model = new testing();
+        $this->model = new $this->modelName();
     }
 
     /**
-     * Menampilkan semua data user.
+     * Menampilkan semua data 
      *
      * @return ResponseInterface
      */
     public function index()
     {
-        $users = $this->model->findAll();
-        return $this->respond($users);
+        $data = $this->model->findAll();
+        return $this->respond($data);
     }
 
     /**
-     * Menampilkan data user berdasarkan ID.
+     * Menampilkan data berdasarkan ID.
      *
      * @param int|string|null $id
      * @return ResponseInterface
@@ -43,7 +43,7 @@ class namacontroler extends ResourceController
     }
 
     /**
-     * Menambah user baru.
+     * Menambah data baru.
      *
      * @return ResponseInterface
      */
@@ -54,7 +54,6 @@ class namacontroler extends ResourceController
     if (!$data) {
         return $this->failValidationErrors('Tidak ada data yang dikirimkan');
     }
-
     
     if (!$this->model->insert($data)) {
         return $this->failValidationErrors($this->model->errors());
@@ -66,7 +65,7 @@ class namacontroler extends ResourceController
 
 
     /**
-     * Mengubah data user berdasarkan ID.
+     * Mengubah data berdasarkan ID.
      *
      * @param int|string|null $id
      * @return ResponseInterface
@@ -82,7 +81,7 @@ class namacontroler extends ResourceController
     
 
     /**
-     * Menghapus data user berdasarkan ID.
+     * Menghapus data berdasarkan ID.
      *
      * @param int|string|null $id
      * @return ResponseInterface
