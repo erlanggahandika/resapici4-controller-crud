@@ -6,9 +6,9 @@ namespace App\Controllers;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
-class User extends ResourceController
+class namectrl extends ResourceController
 {
-    protected $modelbos = 'App\Models\UserModel';
+    protected $modelbos = 'App\Models\nama model';
     protected $format = 'json';
 
     public function __construct()
