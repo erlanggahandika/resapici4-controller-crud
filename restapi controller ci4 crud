@@ -2,93 +2,116 @@
 
 namespace App\Controllers;
 
-
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
-class namectrl extends ResourceController
+class User extends ResourceController
 {
-    protected $modelbos = 'App\Models\nama model';
+    protected $modelbos = 'App\Models\UserModel';
     protected $format = 'json';
 
     public function __construct()
     {
-        $this->modelName = new $this->modelbos();
+        $this->model = new $this->modelbos();
     }
-
     /**
-     * Menampilkan semua data 
+     * Return an array of resource objects, themselves in array format.
      *
      * @return ResponseInterface
      */
     public function index()
     {
-        $model = new $this->modelName();
-    return $this->response->setJSON($model->findAll());
-
+        $data  = $this->model->findAll();
+        return $this->response->setJSON($data, 200);
     }
 
     /**
-     * Menampilkan data berdasarkan ID.
+     * Return the properties of a resource object.
      *
      * @param int|string|null $id
+     *
      * @return ResponseInterface
      */
     public function show($id = null)
     {
-    $model = new $this->modelName();
-    $user = $model->find($id);
-
-    if ($user) {
-        return $this->response->setJSON($user);
+        $data = $this->model->find($id);
+        if (empty($data)) {
+            return $this->fail('fail', 400);
+        }
+        return $this->response->setJSON($data, 200);
     }
-
-    return $this->response->setJSON(['error' => 'Data not found'], 404);
-    }
-
 
     /**
-     * Menambah data baru.
+     * Return a new resource object, with default properties.
+     *
+     * @return ResponseInterface
+     */
+    public function new()
+    {
+        //
+    }
+
+    /**
+     * Create a new resource object, from "posted" parameters.
      *
      * @return ResponseInterface
      */
     public function create()
     {
-    $data = $this->request->getJSON();
-    $model = new $this->modelName();
-    $model->insert($data);
-    return $this->response->setJSON(['status' => 'Data added successfully']);
+        $data = $this->request->getJSON(true);
+
+       
+        $this->model->insert($data);
+        return $this->response->setJSON('data was created', 200);
     }
 
-
     /**
-     * Mengubah data berdasarkan ID.
+     * Return the editable properties of a resource object.
      *
      * @param int|string|null $id
+     *
+     * @return ResponseInterface
+     */
+    public function edit($id = null)
+    {
+        //
+    }
+
+    /**
+     * Add or update a model resource, from "posted" properties.
+     *
+     * @param int|string|null $id
+     *
      * @return ResponseInterface
      */
     public function update($id = null)
     {
-        $data = $this->request->getJSON();
-        $model = new $this->modelName();
-        $model->update($id, $data);
-        return $this->response->setJSON(['status' => 'Data updated successfully']);
+        $data = $this->request->getJSON(true);
+
+        $cekid = $this->model->find($id);
+        if (empty($cekid)) {
+            return $this->response->setJSON('fail', 400);
+        }
+
+        $this->model->update($id, $data);
+        return $this->response->setJSON('data dah updated', 200);
     }
-    
 
     /**
-     * Menghapus data berdasarkan ID.
+     * Delete the designated resource object from the model.
      *
      * @param int|string|null $id
+     *
      * @return ResponseInterface
      */
     public function delete($id = null)
     {
-        $model = new $this->modelName();
-        if (!$this->model->find($id)) {
-            return $this->failNotFound('Data tidak ditemukan');
+        
+        $cekid = $this->model->find($id);
+        if (empty($cekid)) {
+            return $this->fail('fail bos', 400);
         }
         $this->model->delete($id);
-        return $this->response->setJSON(['status' => 'Data deleted successfully']);
+        return $this->response->setJSON('data was deleted', 200);
     }
 }
